@@ -1,0 +1,35 @@
+# Install once with:  pre-commit install
+# Run over everything: pre-commit run --all-files
+#
+# Deliberately small. Anything that rewrites code layout is left out, because the
+# comment structure in src/defa is hand-maintained.
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        # Reference data is never committed, see REFERENCE_DATA.md. The shipped test
+        # fixtures are the largest legitimate files at ~140 KB.
+        args: [--maxkb=500]
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: debug-statements
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.6
+    hooks:
+      # Lint only. ruff-format is intentionally absent.
+      - id: ruff
+        args: [--no-fix]
+
+  - repo: local
+    hooks:
+      - id: pytest
+        name: pytest (unit tests, no reference data)
+        entry: python -m pytest tests -q
+        language: system
+        pass_filenames: false
+        types: [python]

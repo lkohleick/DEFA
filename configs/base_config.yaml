@@ -1,0 +1,79 @@
+force_recompute: True
+task:
+  name: "base"
+  output_dir: "output"
+  run_graph_scorer: False
+dataset:
+  ## set lead_variant_file plus proxy_file, columns in README.md
+  lead_variant_file: null #"examples/data/lead_variants_test.tsv"
+  proxy_file: null #"examples/data/proxies_test.tsv"
+  true_positive_links_file: null
+  gwas_endpoint_file: null
+
+
+parameters:
+  ## the VEP assembly, keep at "hg38": only a GRCh38 cache is installed
+  genome_build: "hg38"
+  scaling_factor_threshold: 0.5
+  interval_kb: 500
+  biotypes_of_interest:
+    - "protein_coding"
+    - "processed_transcript"
+  ensembl_release: 111
+
+## roots of the two downloaded bundles, filled into every `{defa_data_dir}` and `{flames_data_dir}` below
+defa_data_dir:   "/path/to/reference_data/defa_data"
+flames_data_dir: "/path/to/reference_data/Annotation_data"
+
+paths:
+  gene_information:
+    enst_to_ensg_map: "{defa_data_dir}/ensembl/enst_to_ensg_map_ensembl_v112_20251209.parquet"
+
+  eqtl:
+    ## shipped in the Zenodo deposit
+    eqtl_catalogue_max_pip: "{defa_data_dir}/eqtl_catalogue/eqtl_catalogue_r7_max_pip_p5e-8.parquet"
+    gtex_caviar_flames: "{flames_data_dir}/GTEx_v8_finemapping_CAVIAR"
+    eqtl_catalogue_rqtl: "{flames_data_dir}/eQTL_catalog/rQTL"
+    eqtl_catalogue_eqtl: "{flames_data_dir}/eQTL_catalog/eQTL"
+    eqtlgen: "{flames_data_dir}/eQTLGen"
+  open_targets:
+    drug_targets: "{defa_data_dir}/open_targets/approved_and_advanced_drug_targets_ot_20240702.tsv"
+
+  omim:
+    genes_catalogue: "/path/to/reference_data/omim/mim2gene.txt"
+
+  gene_regulation:
+    promoter: "{flames_data_dir}/Promoter_regions/Proms_per_transcript_GRCH38.parquet"
+    catlas:
+      matrix: "{defa_data_dir}/CATlas/matrix.tsv.gz"
+      cre_bed: "{defa_data_dir}/CATlas/cCREs.bed.gz"
+      celltypes: "{defa_data_dir}/CATlas/celltypes.txt.gz"
+      abc_data: "{defa_data_dir}/CATlas/ABC_scores/*.tsv.gz"
+    abc_ep_data: "{flames_data_dir}/ABC_EP"
+    abc_crispr_data: "{flames_data_dir}/ABC_CRISPR"
+    hacer: "{flames_data_dir}/HACER"
+    hic_annotation:
+      javierre_hic_data: "{flames_data_dir}/Javierre_PCHiC"
+      jung_hic_data: "{flames_data_dir}/Jung_PCHiC"
+    fantom5: "{flames_data_dir}/EP_correlation_F5"
+    genehancer: "{flames_data_dir}/GeneHancer"
+    roadmap: "{flames_data_dir}/RoadMapEpi"
+    epimap: "{flames_data_dir}/EpiMap"
+    cicero: "{flames_data_dir}/Cicero_whole_blood"
+vep:
+  executable: "/path/to/vep_env/bin/vep"
+  fasta_file: "/path/to/vep_cache/homo_sapiens/106_GRCh38/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+  cache_dir: "/path/to/vep_cache"
+  env: "/path/to/vep_env" # conda env VEP is installed in
+  env_manager: "micromamba" # activates `env`: micromamba, mamba or conda
+  fork: 8 # cores VEP runs on, passed as --fork
+
+## only read when task.run_graph_scorer is true
+graph_scorer:
+  primekg_dir: "{defa_data_dir}/prime_kg_20220425"
+  txgnn_export_dir: "{defa_data_dir}/txgnn_export_numpy"
+  ensembl_to_primekg_idx_file: "{defa_data_dir}/primekg/node_index_ensembl_id_map.tsv"
+  cache_file: "cache/graph_scorer_graph.cache"
+  max_distance: 4
+  alpha: 0.85
+  exclude_node_types: ['molecular_function', 'cellular_component', 'biological_process']

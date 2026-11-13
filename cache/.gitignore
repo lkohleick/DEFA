@@ -1,0 +1,4 @@
+# This file exists so the cache directory ships with a clone. Git tracks files, not
+# directories, and DEFA writes the shared eQTL parquet and the graph cache in here.
+*
+!.gitignore

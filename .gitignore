@@ -1,0 +1,56 @@
+# Run outputs and caches
+output/
+cache/*
+!cache/.gitignore
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Pipeline run artefacts
+pipelines/test/output/
+pipelines/test/local/
+slurm_logs/
+logs/
+
+# Reference data is never committed, see REFERENCE_DATA.md for how to obtain it
+data/*
+
+# Build script for the prebuilt eQTL Catalogue table, kept locally
+scripts/build_eqtl_catalogue_table.py
+
+# Zenodo deposit staging, built locally and uploaded by hand
+.zenodo_deposit/
+
+# Machine-local reference paths, layered under base_config.yaml at load time
+configs/base_config.local.yaml
+
+# Bulk data files, with the shipped example inputs explicitly kept
+*.csv
+*.tsv
+*.json
+*.parquet
+!examples/data/**
+!pipelines/test/leads.tsv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+venv/
+env/
+.venv/
+
+# Notebooks
+*.ipynb
+.ipynb_checkpoints/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

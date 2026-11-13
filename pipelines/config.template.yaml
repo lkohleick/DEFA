@@ -1,0 +1,95 @@
+# =============================================================================
+# config.template.yaml -- copy this to your run folder and fill it in
+# =============================================================================
+# One config for all three scripts, run them in order from the repo root:
+#
+#   python pipelines/01_ld_proxies.py     --config my_run/config.yaml
+#   python pipelines/02_defa_annotation.py --config my_run/config.yaml
+#   python pipelines/03_gene_scoring.py   --config my_run/config.yaml
+#
+# Every script takes --study NAME to run one study only, and --force to redo a
+# study whose outputs are already there.
+
+# ---------------------------------------------------------------------------
+# Required
+# ---------------------------------------------------------------------------
+
+# All outputs land under {output_dir}/{study_name}/
+output_dir: /absolute/path/to/output
+
+# CPU threads for plink2 in 01_ld_proxies
+# threads: 4
+
+# One entry per GWAS study.
+# The study name becomes the subfolder name and is used in output file names.
+studies:
+  my_study:
+    # Lead variants, 01_ld_proxies finds their LD proxies.
+    # TSV with columns locus_id  chrom_hg38  pos_hg38. Lift the leads to hg38 first.
+    leads_file:    /path/to/leads.tsv
+
+    # Optional -- PrimeKG node index of the study phenotype, an integer, e.g. 36187 for
+    # coronary artery disease. Only the graph scorer reads it. Defaults to the study name.
+    # phenotype_idx: 36187
+
+    # Lead and proxy tables you already have, in the format 01_ld_proxies writes.
+    # Set these instead of leads_file, 01_ld_proxies then skips the study.
+    # lead_variant_file: /path/to/leads_my_study.tsv
+    # proxy_file:        /path/to/proxies_my_study.tsv
+
+    # Optional -- per-study DEFA overrides
+    # scaling_factor_threshold: 0.5
+    # interval_kb: 500
+
+  # another_study:
+  #   leads_file:    /path/to/other_leads.tsv
+
+# ---------------------------------------------------------------------------
+# 01_ld_proxies -- sample LD pipeline, 1000 Genomes EUR hg38 only
+# ---------------------------------------------------------------------------
+# Drop this block when every study brings its own lead and proxy tables.
+# Any other panel or build needs changes to the script, see LD_PANEL.md.
+
+ld_proxies:
+  # the panel built in LD_PANEL.md section 2
+  panel:
+    dir: /path/to/1kg38_eur_pfiles
+
+  # plink2_binary: /path/to/plink2    # default: plink2 on PATH
+  # ld_window_kb: 3000
+  # ld_window_r2: 0.5
+
+# ---------------------------------------------------------------------------
+# 02_defa_annotation -- annotation settings, applied to every study
+# ---------------------------------------------------------------------------
+
+# annotation:
+#   # Graph-based scoring (shortest path, PageRank, Adamic-Adar via PrimeKG).
+#   # Requires the graph_scorer block in configs/base_config.yaml.
+#   run_graph_scorer: false
+#
+#   # Override part of DEFA's graph_scorer block, same keys as base_config.yaml
+#   graph_scorer:
+#     max_distance: 4
+#     alpha: 0.85
+#
+#   # Variant score filter, the r2 a proxy needs to be kept.
+#   # A study can set its own. Defaults to DEFA's base_config value of 0.5.
+#   scaling_factor_threshold: 0.5
+#
+#   # Re-run all DEFA steps from scratch. The eQTL and graph caches are kept.
+#   force_recompute: false
+
+# ---------------------------------------------------------------------------
+# 03_gene_scoring -- model scoring
+# ---------------------------------------------------------------------------
+
+scoring:
+  # Directory holding the *.json models. Default: the deposit models under
+  # defa_data_dir of configs/base_config.local.yaml
+  # models_dir: /path/to/defa_data/models/defa_models_v1.0.0
+
+  # Model family selection. Both are on by default. A table without graph
+  # features (no graph_distance column) disables the graph models by itself.
+  # use_graph_models: true
+  # use_no_graph_models: true

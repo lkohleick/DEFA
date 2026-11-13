@@ -1,0 +1,11 @@
+force_recompute: True
+task:
+  name: "test_hg19"
+  output_dir: "output/"
+  run_graph_scorer: True
+
+dataset:
+  lead_variant_file: "examples/data/lead_variants_test_hg19.tsv"
+  proxy_file: "examples/data/proxies_test_hg19.tsv"
+  gwas_endpoint_file: "examples/data/phenotype_map_test.tsv"
+

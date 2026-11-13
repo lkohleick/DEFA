@@ -1,0 +1,19 @@
+################################################
+####         Machine layer template         ####
+################################################
+## copy to base_config.local.yaml and fill in, INSTALL.md section 4d
+## any other key of base_config.yaml can be overridden here too
+
+defa_data_dir:   "/path/to/reference_data/defa_data"
+flames_data_dir: "/path/to/reference_data/Annotation_data"
+
+paths:
+  omim:
+    genes_catalogue: "/path/to/reference_data/omim/mim2gene.txt"
+
+vep:
+  executable:  "/path/to/vep_env/bin/vep"
+  fasta_file:  "/path/to/vep_cache/homo_sapiens/106_GRCh38/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+  cache_dir:   "/path/to/vep_cache"
+  env:         "/path/to/vep_env"
+  env_manager: "micromamba"   # or mamba, conda

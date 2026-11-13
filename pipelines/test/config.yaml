@@ -1,0 +1,15 @@
+# Smoke-test config -- paths are relative to the repo root, run the scripts from there.
+# Leads, LD proxies and endpoints ship with the test, so 01_ld_proxies is not run.
+# The models are found through defa_data_dir in configs/base_config.local.yaml.
+output_dir: pipelines/test/output
+
+studies:
+  test_run:
+    lead_variant_file:  pipelines/test/leads_test_run.tsv
+    proxy_file:         pipelines/test/proxies_test_run.tsv
+    # every locus mapped to PrimeKG node 36187, coronary artery disease, the graph scorer needs a real node
+    gwas_endpoint_file: pipelines/test/endpoints_test_run.tsv
+
+annotation:
+  force_recompute: true
+  run_graph_scorer: true

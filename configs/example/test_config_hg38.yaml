@@ -1,0 +1,13 @@
+force_recompute: True
+task:
+  name: "test_hg38"
+  output_dir: "output/"
+  run_graph_scorer: False
+
+dataset:
+  lead_variant_file: "examples/data/lead_variants_test.tsv"
+  proxy_file: "examples/data/proxies_test.tsv"
+  gwas_endpoint_file: "examples/data/phenotype_map_test.tsv"
+
+## format demo for run.py, it still needs the full reference data to run
+## ids are rsids or hg19 marker names here, any id works if lead and proxy files agree

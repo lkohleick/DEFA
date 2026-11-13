@@ -1,0 +1,12 @@
+version: 2
+
+updates:
+  # Action versions only. The Python pins in pyproject.toml are deliberate: a minor
+  # bump in the scientific stack can move numerical output, so those get reviewed by
+  # hand against a rerun, not by an unattended pull request.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: ci

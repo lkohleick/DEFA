@@ -1,0 +1,33 @@
+# Runtime environment for DEFA.
+#   micromamba env create -f environment.yml && micromamba activate defa
+name: defa
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.10,<3.12
+  - easydict=1.13
+  - networkx
+  - numpy=2.2.2
+  - pandas=2.2.3
+  - polars=1.21.0
+  - pyarrow=19.0.0
+  # pulls the `bedtools` binary, which pybedtools shells out to at runtime
+  - pybedtools=0.12.1
+  - pyyaml=6.0.2
+  - scipy=1.15.1
+  - tqdm=4.67.1
+  # pipelines/03_gene_scoring.py only
+  - scikit-learn
+  - xgboost=3.3.0
+
+  # runs the test suite
+  - pytest
+  - pip
+  - pip:
+    - loguru==0.7.3
+    - pyliftover
+    # pyensembl with the datacache and setuptools it works with
+    - pyensembl==2.3.13
+    - datacache==1.5.0
+    - setuptools<81
